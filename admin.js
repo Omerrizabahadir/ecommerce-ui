@@ -44,13 +44,15 @@ async function addProduct(){
         if(!response.ok){
             throw new Error("Product add request failed status code :" + response.status)
         }
+        
         return response.json()      //json a çevir
-       
+        
     }).then(data => {
         console.log(data)
          //modalı kapatacak
          hideProductModal('addProductModal') //admin.html de addproduct -> id ="addProductModal" ---modalı kapat
-         clearModalValues();   //Formu temizle
+         clearModalValues(); 
+         showSuccessAlert('Product added successfully');  //Ürün başarıyla eklendi alerti
          getAllProduct();      //tüm ürünleri getir
         
     }).catch(error => {
@@ -101,6 +103,51 @@ async function addProduct(){
             `;
         });  
     }
+
+    //success alert için
+    function showSuccessAlert(message) {
+        let alert = document.getElementById('success-alert');
+        alert.style.display = 'block';
+        alert.style.opacity = 1;       //buraya kadar html sayfasında tablonun altında alert görünüyor
+
+        //mesaj içeriğini  alert içine yerleştir
+        let alertMessage = document.getElementById('successAlertMessage');
+        alertMessage.textContent = message;
+
+        setTimeout (() => {
+            let opacity = 1;
+            let timer = setInterval (() => {
+                if(opacity <= 0.1){
+                    clearInterval(timer);
+                    alert.style.display = 'none';
+                } else {
+                    opacity -= 0.1;                // Opasiteyi azalt
+                    alert.style.opacity = opacity;
+                }
+            }, 50);
+        }, 3000);
+    }
+    //BAŞARISIZ alert'i
+function showFailAlert(message) {
+    let alert = document.getElementById('fail-alert');
+    alert.style.display = 'block';
+    alert.style.opacity = 1;
+
+    let alertMessage = document.getElementById('failAlertMessage');
+    alertMessage.textContent = message;
+    setTimeout(() => {
+        let opacity = 1;
+        let timer = setInterval(() => {
+            if (opacity <= 0.1) {
+                clearInterval(timer);
+                alert.style.display = 'none';
+            }
+            alert.style.opacity = opacity;
+            opacity -= opacity * 0.1;
+        }, 50);
+    }, 3000);
+}
+
     /*admin.html de DELETE MODAL içindeki data-bs-dismiss="modal" ile modal çıktığında istediğimizde x 'ya basarak kapatmamsı gerekliydi. Ancak çalışmadı 
         hocada showDeleteProductModal() ve hideProductModal() ekleyerek kapanmasını admin.js tarafından yaptı*/
         function showDeleteProductModal(productId) {
@@ -142,7 +189,7 @@ async function addProduct(){
             confirmDeleteModal.show();
         }
         //Onay butonuna tıklanınca method ile delete yapma işlevi--->admin.html de butona onclick="confirmDeletion()" ekle. eğer method ile yaparsan sonuna currentProductId=null; } ile kapat
-        function confirmDeletion(){
+         function confirmDeletion(){
             if(currentProductId === 0){    
                 console.error('No product ID available for deletion.');
                 return;      
@@ -164,11 +211,14 @@ async function addProduct(){
         }
     }).then(response => {
         if (!response.ok) {
+            
             throw new Error(`Product deletion request failed status code: ${response.status}`);
         }
        
-        getAllProduct();                  //sildikten sonra tekrar ürünleri çekecek ve render edecek
+        showSuccessAlert('Product is successfully deleted!')
+        getAllProduct();                                        //sildikten sonra tekrar ürünleri çekecek ve render edecek
         hideProductModal('confirmDeleteButton');
+        
         
     }).catch(error => {
         console.log("Error : ", error);
@@ -250,6 +300,7 @@ async function addProduct(){
             }
             getAllProduct();
             closeUpdateProductModal();
+            showSuccessAlert('Product is successfully updated!')          //ürün başarıyla eklendi alerti
         }).catch(error => {
             console.error("Error : ",error)
         });
@@ -266,3 +317,4 @@ async function addProduct(){
                 await getAllProduct();
             });
 
+            
