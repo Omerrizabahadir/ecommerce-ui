@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+
+</html>
+
+<head>
+    
+    <title>Admin Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
+</head>
+<body>
+    
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#" onclick="loadPage('admin')">Admin Page</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html" >Go to Category</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" >Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav> 
+    </header>
+
+     <!-- Admin content -->
+      <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Admin Panel</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- data-bs-target="#addProductModal" admin.js de kullanırsan modal direkt açılır. Bu ürün eklerken gerekli o yüzden sadece addProduct 'a ekledik. DİKKAT!!! updateProduct ' ta data-bs-target ile yapamazsın çünkü ilk ürün eklenecek sonra modal açılacak-->
+                        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>  <!--# şunu yapar-> addProductModal'ın id sini alır -->
+                        <!-- butona basılınca modal açılsın. modal kısmını aşağıya yazacaz.ADD PRODUCT MODAL-->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Category Id</th>
+                                    <th>Image</th>
+                                    <th>Active</th>
+                                    <th>Process</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                 <!-- Urunler buraya backendden çekilip eklenecek (dinamik)-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+      <!-- Add Product Modal ürün ekleme butonu için-->
+      <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true"> <!-- Yukardaki data-bs-target="#addProductModal" daki # ı görüp addProductModal yapıyor.-->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <input type="hidden" class="form-control" id="updateProductId">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="productName" required>  <!-- required -> gerekli yani ekle anlamında-->
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="productPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="productUnitsInStock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryId" class="form-label">Category Id</label>
+                            <input type="number" class="form-control" id="productCategoryId" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <label for="productActive" class="form-check-label">Active</label>
+                            <input type="checkbox" class="form-check-input" id="productActive" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productImage" class="form-label">Image</label>
+                            <input type="file" class="form-control" id="productImage" accept="image/*" required>
+                        </div>
+
+                            <button type="button" class="btn btn-primary" onclick="addProduct()">Add Product</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+      <!-- Update Product Modal ürünü güncelleme butonu için-->
+       <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel"
+       aria-hidden="true">
+       <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- data-bs-dismiss="modal"  bootstrap 5 te tıklanınca modalı kapatma-->
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input type="hidden" class="form-control" id="updateProductId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="updateProductName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="updateProductPrice" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="updateProductUnitsInStock" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryId" class="form-label">Category Id</label>
+                        <input type="number" class="form-control" id="updateProductCategoryId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="active" class="form-label">Active</label>
+                        <input type="checkbox" class="form-check-input" id="updateProductActive" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="updateProductImage" accept="image/*">
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal" onclick="saveUpdateProduct()">Update Product</button>   
+                 </div>
+            </div>
+         </div>
+     </div>
+
+     
+     <!-- DELETE Confirm product Modal  ürünü silme butonu için-->  
+    
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this product?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="confirmDeleteButton" onclick="confirmDeletion()">Delete</button>  
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+    <!-- Bootstrap JS ve Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Uygulama JavaScript dosyası -->
+    <script src="admin.js"></script>
+</body>
