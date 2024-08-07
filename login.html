@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Login</title>
+      <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" >
+   <link href="login.css" rel="stylesheet">   <!--login.css te yazdık css kısmını internal(kendi yaptığımız ama yolu farklı)-->
+</head>
+
+<body> 
+
+   <div class="login-container">
+      <h3 class="text-center mb-4">Login</h3> <!--mb-4 class'ı margin-bottom: 1.5rem; gibi bir stil içerebilir. Bu, elementin alt kenarında 24 piksel (varsayılan font boyutuna göre) bir boşluk bırakır.-->
+      <form id="login-form">
+         <div class="mb-3"> <!--mb-3 class'ı, Bootstrap gibi CSS framework'lerinde yaygın olarak kullanılan bir class'tır ve margin-bottom (alt kenar boşluğu) ekler. mb-3, belirli bir piksel veya em biriminde tanımlanmış bir alt kenar boşluğu sağlar.-->
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" required> <!--id sadece 1 kere kullanılır.Çünkü bu id ile değerini çekiyoruz.  required boş olursa hata verir-->
+   </div>
+   <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" required>
+   </div>
+   <button type="button" class="btn btn-primary" onclick="submitForm()">Login</button>  <!--onclick="submitForm() js tarafında belirleyecez-->
+   </form>
+   <p class="mt-3 text-center"> Don't you have an account? <a href="register.html">Register</a></p>  <!--mt-3 class'ı, üst kenar boşluğunu 3 birim (genellikle 16 piksel her birim) artırır. -->
+</div>
+<!-- Bootstrap JS ve Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="login.js"></script>
+</body>
+</html>
