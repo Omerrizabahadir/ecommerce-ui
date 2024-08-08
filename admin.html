@@ -82,7 +82,7 @@
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
-                                    <th>Category Id</th>
+                                    <th>Category</th>
                                     <th>Image</th>
                                     <th>Active</th>
                                     <th>Process</th>
@@ -124,8 +124,9 @@
                             <input type="number" class="form-control" id="productUnitsInStock" required>
                         </div>
                         <div class="mb-3">
-                            <label for="categoryId" class="form-label">Category Id</label>
-                            <input type="number" class="form-control" id="productCategoryId" required>
+                            <select id="categorySelect" class="form-select form-select-sm" aria-label="form-select-sm example" required>
+                                  <!-- Kategoriler buraya backendden çekilip eklenecek (dinamik olarak)-->
+                              </select>
                         </div>
                         <div class="mb-3 form-check">
                             <label for="productActive" class="form-check-label">Active</label>

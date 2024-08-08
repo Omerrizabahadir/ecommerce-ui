@@ -11,7 +11,7 @@ async function addProduct(){
     const productName = document.getElementById('productName').value;                         //backend'in product modelinde ürün ismini burada productName aldık
     const productPrice = document.getElementById('productPrice').value;                       //backend'in product modelinde ürün fiyatı burada productPrice aldık
     const productUnitsInStock = document.getElementById('productUnitsInStock').value;         //backend'in product modelinin ürün unitsInStock bilgisi burada productUnitsInStock aldık
-    const productCategoryId = document.getElementById('productCategoryId').value;             //backend'i categoryId burada productCategoryId
+    const productCategoryId = document.getElementById('categorySelect').value;             //backend'i categoryId burada productCategoryId
     const productActive = document.getElementById('productActive').checked;                     //backend'i active burada productActive
 
     //admin.html de form olarak bu ürünler gösterilecek
@@ -42,9 +42,11 @@ async function addProduct(){
         body: formData
     }).then(response => {
         if(!response.ok){
+            showFailAlert('Product add is unsuccessfull ');
             throw new Error("Product add request failed status code :" + response.status)
+            
         }
-        
+      
         return response.json()      //json a çevir
         
     }).then(data => {
@@ -103,6 +105,48 @@ async function addProduct(){
             `;
         });  
     }
+
+    //kategorileri backendden çekmek, api-call
+    async function fethCategories() {
+        console.log("jwt : " + jwtToken);
+        try {
+        const response = await fetch(BASE_PATH + "category", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwtToken
+            }
+        });
+        if (!response.ok) {
+            console.error("response status :" + response.status)
+            throw new Error("Failed to get categories, response status : " + response.status)
+        }
+        const data = await response.json();
+        console.log(data);
+
+        displayCategories(data) //kategoriyi ekranda göster
+    
+    }catch(error) {
+        console.error("Error fetching categories: ", error);
+         if (error.status === 403) { //TODO: status undefined geliyor.
+        window.location.href = "login.html"
+        }
+        }
+    }
+
+    //display kategori ve display product eklenecek
+    function displayCategories(categories) {
+        const categorySelect = document.getElementById("categorySelect");
+        categorySelect.innerHTML = ''; // öncedeki kategorileri temizle.
+
+    categories.forEach(category => {
+        const option = document.createElement("option");  //categorySelect option ile kullanılır.değerler için
+        option.value = category.id;
+        option.text = category.name;
+        categorySelect.appendChild(option);
+
+    });
+}   
 
     //success alert için
     function showSuccessAlert(message) {
@@ -167,7 +211,7 @@ function showFailAlert(message) {
             document.getElementById('productName').value = '';
             document.getElementById('productPrice').value = '';
             document.getElementById('productUnitsInStock').value = '';
-            document.getElementById('productCategoryId').value = '';
+            document.getElementById('categorySelect').value = ''; //******** */
             document.getElementById('productActive').checked = '';
         }
 
@@ -314,7 +358,10 @@ function showFailAlert(message) {
             // her şey yüklendiyse sayfa ilk açıldığında tüm ürünleri getirsin
             document.addEventListener('DOMContentLoaded', async () => {
 
+                
                 await getAllProduct();
+                await fethCategories();
+               
             });
 
-            
+           
