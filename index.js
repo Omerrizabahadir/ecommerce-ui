@@ -255,6 +255,7 @@
 
             //kategori seçimini dinle ve product'ları çek.
             const categorySelect = document.getElementById("categorySelect");
+            await fetchProductByCategory(categorySelect.value);     //bu burayada eklenince categoryler sayfasında goto da geldi
             categorySelect.addEventListener("change", async function () { //html sayfasında ELECTRONIC,GARDEN,COSMETIC bunlardan birini seçince yani değişirse(change) seçilen hangisi ise id sini alacak
                 await fetchProductByCategory(categorySelect.value);  //categorySelect kategori seçilince-> seçilen kategoriye istek atacaz-->fetchProductByCategory() . bu metod fetcCategory() nin altında
             });
