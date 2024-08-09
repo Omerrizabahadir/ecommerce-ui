@@ -38,6 +38,9 @@
             z-index: 1040; /* Kapatma düğmesini uyarının üzerinde göstermek için */
         }
 
+        table{
+            text-align: center;
+        }
 
     </style>
 </head>
@@ -82,7 +85,7 @@
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
-                                    <th>Category</th>
+                                    <th>Category Id</th>
                                     <th>Image</th>
                                     <th>Active</th>
                                     <th>Process</th>
@@ -124,7 +127,8 @@
                             <input type="number" class="form-control" id="productUnitsInStock" required>
                         </div>
                         <div class="mb-3">
-                            <select id="categorySelect" class="form-select form-select-sm" aria-label="form-select-sm example" required>
+                            <select id="categorySelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"></select>
+                            
                                   <!-- Kategoriler buraya backendden çekilip eklenecek (dinamik olarak)-->
                               </select>
                         </div>

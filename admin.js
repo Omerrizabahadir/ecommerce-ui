@@ -78,7 +78,7 @@ async function addProduct(){
             const productList = await response.json();
             console.log("productList : ",productList)
             await renderProductTable(productList);          //alınan ürünleri tabloya ekle
-    
+           
         }catch(error){
             console.error("error : ", error)
     } 
@@ -136,11 +136,11 @@ async function addProduct(){
 
     //display kategori ve display product eklenecek
     function displayCategories(categories) {
-        const categorySelect = document.getElementById("categorySelect");
+        const categorySelect = document.getElementById('categorySelect');
         categorySelect.innerHTML = ''; // öncedeki kategorileri temizle.
 
     categories.forEach(category => {
-        const option = document.createElement("option");  //categorySelect option ile kullanılır.değerler için
+        const option = document.createElement('option');  //categorySelect option ile kullanılır.değerler için
         option.value = category.id;
         option.text = category.name;
         categorySelect.appendChild(option);
