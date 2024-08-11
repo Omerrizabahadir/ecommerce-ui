@@ -1,5 +1,4 @@
-const BASE_PATH = "http://localhost:8080/"
-
+const BASE_PATH = "http://localhost:8080/";
 
 function submitForm() {
     const formData = {
@@ -16,7 +15,7 @@ function submitForm() {
         }
     };
 
-    console.log("form datası : ", formData);
+    console.log("Form Data: ", formData);
 
     fetch(BASE_PATH + "customer/register", {
         method: 'POST',
@@ -26,13 +25,35 @@ function submitForm() {
         }
     }).then(response => {
         if (!response.ok) {
-            throw new Error("Kayıt isteği başarısız durum kodu : " + response.status)
+            return response.json().then(errorData => {
+                // Show error message to user
+                displayError(errorData.message || "Kayıt isteği başarısız");
+                // Show alert message aynı email ile girilirse uyarı verecek
+                alert(errorData.message || "Kayıt isteği başarısız");
+                throw new Error(errorData.message || "Kayıt isteği başarısız");
+            });
         }
-        return response.json()
+        return response.json();
     }).then(data => {
-        console.log(data)
-        window.location.href = "login.html"
+        console.log("Registration successful:", data);
+        window.location.href = "login.html";
     }).catch(error => {
+        // Handle unexpected errors
         console.error('Error:', error);
+        alert('Bir hata oluştu. Lütfen tekrar deneyin.');
     });
+}
+//veritabanımda kayıtlı email ile giriş yaparsa hata verecek
+function displayError(message) {
+    // Get or create error message container
+    let errorContainer = document.getElementById('error-message');
+    if (!errorContainer) {
+        errorContainer = document.createElement('div');
+        errorContainer.id = 'error-message';
+        errorContainer.className = 'alert alert-danger d-none';
+        document.querySelector('.container').prepend(errorContainer);
+    }
+    
+    errorContainer.textContent = message;
+    errorContainer.classList.remove('d-none'); // Show the error message
 }
