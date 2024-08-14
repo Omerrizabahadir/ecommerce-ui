@@ -123,8 +123,8 @@ async function addProduct(){
         }
         const data = await response.json();
         console.log(data);
-
-        displayCategories(data) //kategoriyi ekranda göster
+        displayCategoriesWithSelectMenu(data);     // Kategorileri select menüsüne ekle
+        displayCategories(data)                         //kategoriyi ekranda göster
     
     }catch(error) {
         console.error("Error fetching categories: ", error);
@@ -273,6 +273,20 @@ function showFailAlert(message) {
     currentProductId=null;  //ürün id 'si sıfırla
     }
 
+// Kategorileri select menü  ile gösteren fonksiyon
+//fetchCategories() json veri alındıktan sonra displayCategoriesWithSelectMenu()eklemelisin
+    function displayCategoriesWithSelectMenu(categories){
+        const categorySelect = document.getElementById('updateProductCategorySelect');
+        categorySelect.innerHTML = '';          // mevcut seçenekleri temizle
+
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.text = category.name;
+            categorySelect.appendChild(option);
+        });
+
+    }
 
 //---------------------------UPDATE-----------------------------
     //ürünü güncelleme
@@ -295,9 +309,15 @@ function showFailAlert(message) {
             document.getElementById('updateProductName').value = product.name;                       //git admin.html'de modal kısmından ürün name'inin id'sini  al (id="updateProductName") ve bu id için value olarak Backend'den gelen değeri yani(productName)'yi koy.value=product.name html sayfasında girilen ürünün ismidir
             document.getElementById('updateProductPrice').value = product.price;
             document.getElementById('updateProductUnitsInStock').value = product.unitsInStock;
-            document.getElementById('updateProductCategoryId').value = product.productCategoryId;
             document.getElementById('updateProductActive').checked = product.active;
-            
+            //Mevcut category seçimi ayarlama
+            //admin.html deki <select id="updateProductCategorySelect" ekledim
+            document.getElementById('updateProductCategorySelect').value = product.categoryId;     
+
+            //Resim alanını boşaltacak
+            document.getElementById('updateProductImage').value = '';
+
+            //modalı göster
             //moodala ürünü güncelledik.Şimdi MODAL'ı js tarafından açacağız
             const updateProductModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('updateProductModal'))  // Returns a Bootstrap modal instance. updateProductModal admin.html 'de div in id si 
             updateProductModal.show();
@@ -313,7 +333,7 @@ function showFailAlert(message) {
         const updateProductName = document.getElementById('updateProductName').value;
         const updateProductPrice = document.getElementById('updateProductPrice').value;
         const updateProductUnitsInStock = document.getElementById('updateProductUnitsInStock').value;
-        const updateProductCategoryId = document.getElementById('updateProductCategoryId').value;
+        const updateProductCategoryId = document.getElementById('updateProductCategorySelect').value;          //ürün güncellenirkende select menu deki -->id yi eklicez<select id="updateProductCategorySelect"
         const updateProductActive = document.getElementById('updateProductActive').checked;
 
         const updateProductImage = document.getElementById('updateProductImage'); //foto varsada yoksada güncellemede fotoyu verecek 
@@ -354,9 +374,9 @@ function showFailAlert(message) {
                 console.log("modal close")
                 const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('updateProductModal'))   // Returns a Bootstrap modal instance
                 modal.hide();
-            }
-            // her şey yüklendiyse sayfa ilk açıldığında tüm ürünleri getirsin
-            document.addEventListener('DOMContentLoaded', async () => {
+    }
+        // her şey yüklendiyse sayfa ilk açıldığında tüm ürünleri getirsin
+        document.addEventListener('DOMContentLoaded', async () => {
 
                 
                 await getAllProduct();
@@ -364,4 +384,4 @@ function showFailAlert(message) {
                
             });
 
-           
+       
